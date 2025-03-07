@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2598f59ba722b4d87057d407708830, type: 3}
+  m_Name: Sickle
+  m_EditorClassIdentifier: 
+  m_toolType: 4
+  m_UpgradePercent:
+  - 100
+  - 90
+  - 86
+  - 82
+  - 79
+  - 76
+  - 74
+  - 72
+  - 70
+  - 68
+  - 66
+  - 64
+  - 62
+  - 60
+  - 57
+  - 54
+  - 51
+  - 48
+  - 45
+  - 42
+  - 39
+  m_reinforcePercent:
+  - 80
+  - 80
+  - 80
+  - 80
+  - 80
+  - 70
+  - 70
+  - 70
+  - 70
+  - 70
+  - 60
+  - 60
+  - 60
+  - 60
+  - 60
+  - 40
+  - 40
+  - 40
+  - 40
+  - 40
+  - 30

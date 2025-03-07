@@ -97,7 +97,6 @@ public class ChestManager : MonoBehaviour
     /// </summary>
     void Setting()
     {
-        d
         for (int i = 0; i < m_chestBtn.Length; i++)
         {
             m_chestBtn[i].m_image = m_chestBtn[i].transform.Find("Image").gameObject.GetComponent<Image>();
