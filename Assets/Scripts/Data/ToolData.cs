@@ -13,36 +13,36 @@ public class ToolData : ScriptableObject
     /// <summary>
     /// 툴 코드
     /// </summary>
-    public int m_code = 0;
+    public int code = 0;
 
     /// <summary>
     /// 툴 타입
     /// </summary>
-    public StuffType.ToolType m_toolType = new StuffType.ToolType();
+    public StuffType.ToolType toolType = new StuffType.ToolType();
 
     /// <summary>
     /// 업그레이드 횟수
     /// </summary>
-    public int m_upgradeCount = 0;
+    public int upgradeCount = 0;
     
     /// <summary>
     /// 이미지
     /// </summary>
-    public Sprite m_image = null;
+    public Sprite image = null;
 
     /// <summary>
     /// 이름
     /// </summary>
-    public string m_name = string.Empty;
+    public string name = string.Empty;
 
     /// <summary>
     /// 가격
     /// </summary>
-    public long m_price = 0;
+    public long price = 0;
 
     [TextArea]
     /// <summary>
     /// 설명
     /// </summary>
-    public string m_explanation = string.Empty;
+    public string explanation = string.Empty;
 }

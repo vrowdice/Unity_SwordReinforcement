@@ -8,25 +8,42 @@ public class QuickItemUseBtn : MonoBehaviour
     /// <summary>
     /// 자신의 아이템 코드
     /// </summary>
-    public int m_ownitemCode = 0;
+    public int ownitemCode = 0;
 
     /// <summary>
     /// 자신의 토글
     /// </summary>
-    public Toggle m_ownToggle = null;
+    public Toggle ownToggle = null;
+
+    // 캐시된 참조들
+    private GameDataManager dataManager;
+    private GameManager gameManager;
+
+    private void Start()
+    {
+        dataManager = GameDataManager.Instance;
+        gameManager = GameManager.Instance;
+    }
 
     /// <summary>
     /// 아이템 빠른 사용 클릭시
     /// </summary>
     public void Click()
     {
-        if(GameDataManager.Instance.ManageItem(m_ownitemCode).m_use == true)
+        var itemData = dataManager.GetItemData(ownitemCode);
+        if (itemData == null)
         {
-            GManager.Instance.m_itemManager.DisableItem(m_ownitemCode);
+            gameManager.Warning("아이템을 찾을 수 없습니다.");
+            return;
+        }
+
+        if (itemData.isInUse)
+        {
+            gameManager.toolManager.DisableItem(ownitemCode);
         }
         else
         {
-            GManager.Instance.m_itemManager.ActiveItem(m_ownitemCode);
+            gameManager.toolManager.ActiveItem(ownitemCode);
         }
     }
 }

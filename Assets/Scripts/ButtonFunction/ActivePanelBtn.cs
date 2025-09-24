@@ -7,17 +7,17 @@ public class ActivePanelBtn : MonoBehaviour
     /// <summary>
     /// 켜고 끌 타겟
     /// </summary>
-    public GameObject m_target = null;
+    public GameObject target = null;
 
     public void Click()
     {
-        if(m_target.activeSelf == false)
+        if(target.activeSelf == false)
         {
-            m_target.SetActive(true);
+            target.SetActive(true);
         }
         else
         {
-            m_target.SetActive(false);
+            target.SetActive(false);
         }
     }
 }
