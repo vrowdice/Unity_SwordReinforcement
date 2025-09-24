@@ -33,6 +33,7 @@ public class StoreManager : MonoBehaviour
     /// <summary>
     /// 상점 콘텐츠 선택 버튼
     /// </summary>
+    [SerializeField]
     GameObject[] m_storSelectBtn = null;
 
     /// <summary>
@@ -75,10 +76,6 @@ public class StoreManager : MonoBehaviour
         m_itemExplain = m_itemBuySellPanel.transform.Find("ExplainText").gameObject.GetComponent<Text>();
         m_itemPrice = m_itemBuySellPanel.transform.Find("PriceText").gameObject.GetComponent<Text>(); ;
         m_itemAmount = m_itemBuySellPanel.transform.Find("AmountText").gameObject.GetComponent<Text>();
-
-        m_storSelectBtn[0] = transform.Find("OneToggle").gameObject;
-        m_storSelectBtn[1] = transform.Find("ConToggle").gameObject;
-        m_storSelectBtn[2] = transform.Find("CshToggle").gameObject;
 
         m_storScrollView[0] = transform.Find("Scroll View Stor Disposable").gameObject;
         m_storScrollView[1] = transform.Find("Scroll View Stor Last").gameObject;
