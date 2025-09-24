@@ -2,22 +2,20 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
-  ObjectHideFlags: 0
-  CorrespondingSourceObject: {fileID: 0}
-  PrefabInstance: {fileID: 0}
-  PrefabAsset: {fileID: 0}
-  GameObject: {fileID: 0}
-  Enabled: 1
-  EditorHideFlags: 0
-  Script: {fileID: 11500000, guid: 7662afc4ded189a4db2882508b01f199, type: 3}
-  Name: 10000
-  EditorClassIdentifier: 
-  code: 10000
-  toolIndex: 0
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7662afc4ded189a4db2882508b01f199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 0
+  toolType: 0
   upgradeCount: 0
-  name: "\uBC14\uB298"
+  image: {fileID: 0}
+  name: 
   price: 0
-  explanation: "\uB0A0\uCE74\uB85C\uC6B4 \uBC14\uB298"
-  image: {fileID: 21300000, guid: f4e1b38b10aa08b448d13a04c878660a, type: 3}
-  nextUp: 0
-  percent: 0
+  explanation: 
