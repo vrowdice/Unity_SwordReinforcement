@@ -19,7 +19,7 @@ public class ChestBtn : MonoBehaviour
     public Toggle toggle = null;
 
     /// <summary>
-    /// 버튼 코드
+    /// 버튼 코드 
     /// </summary>
     public int code = 0;
 
