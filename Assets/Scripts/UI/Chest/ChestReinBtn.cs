@@ -36,10 +36,13 @@ public class ChestReinBtn : MonoBehaviour
     {
         if (toolRein <= -1)
         {
-            GameManager.Instance.Warning("존재하지 않습니다.");
+            var gameManager = GameManager.Instance;
+            gameManager?.Warning("존재하지 않습니다.");
             return;
         }
-        GameManager.Instance.chestManager.SelectToolRein(toolRein);
+        
+        var chestManager = GameManager.Instance?.chestManager;
+        chestManager?.SelectToolRein(toolRein);
     }
 
     /// <summary>

@@ -353,7 +353,7 @@ public class StorePanel : BasePanel
             return;
         }
 
-        GameManager.Instance?.BuySetSlider(nowItemCode);
+        GameManager.Instance?.UiManager?.BuySetSlider(nowItemCode);
     }
 
     /// <summary>
@@ -387,6 +387,9 @@ public class StorePanel : BasePanel
 
         GameDataManager.ChangeItemAmount(argItemCode, argAmount);
         UpdateBuySellPanel(argItemCode);
+        
+        // UI 업데이트
+        GameManager.Instance?.UiManager?.UpdateAllMainText();
     }
 
     /// <summary>
@@ -400,7 +403,7 @@ public class StorePanel : BasePanel
             return;
         }
 
-        GameManager.Instance?.SellSetSlider(nowItemCode);
+        GameManager.Instance?.UiManager?.SellSetSlider(nowItemCode);
     }
 
     /// <summary>
@@ -441,6 +444,9 @@ public class StorePanel : BasePanel
         GameDataManager.ChangeItemAmount(argItemCode, -argAmount);
         
         UpdateBuySellPanel(argItemCode);
+        
+        // UI 업데이트
+        GameManager.Instance?.UiManager?.UpdateAllMainText();
     }
 
     /// <summary>

@@ -182,6 +182,9 @@ public class ChestPanel : BasePanel
         {
             GameDataManager.UpdateChest(nowChestType);
         }
+        
+        // UI 업데이트
+        MainUiManager?.UpdateAllMainText();
     }
 
     /// <summary>
@@ -231,8 +234,7 @@ public class ChestPanel : BasePanel
         if (nowChestType == PanelType.ChestType.Tool)
         {
             ChestPutOffTool();
-            if (toolReinPanel != null)
-                toolReinPanel.SetActive(false);
+            CloseToolReinPanel();
         }
         else if (nowChestType == PanelType.ChestType.Item)
         {
@@ -247,8 +249,7 @@ public class ChestPanel : BasePanel
         }
 
         NowImfoUpdate();
-        if (chestPanel != null)
-            chestPanel.SetActive(false);
+        CloseChestPanel();
     }
 
     /// <summary>
@@ -259,8 +260,7 @@ public class ChestPanel : BasePanel
         if (nowChestType == PanelType.ChestType.Tool)
         {
             ChestSellTool();
-            if (toolReinPanel != null)
-                toolReinPanel.SetActive(false);
+            CloseToolReinPanel();
         }
         else if (nowChestType == PanelType.ChestType.Item)
         {
@@ -268,8 +268,7 @@ public class ChestPanel : BasePanel
         }
 
         NowImfoUpdate();
-        if (chestPanel != null)
-            chestPanel.SetActive(false);
+        CloseChestPanel();
     }
 
     /// <summary>
@@ -381,19 +380,20 @@ public class ChestPanel : BasePanel
 
         if (GameDataManager.ManageTool(nowCode, nowReinforceCount) <= 0)
         {
-            GameManager.Instance?.Warning("꺼낼 수 없습니다.");
+            ShowWarning("꺼낼 수 없습니다.");
             return;
         }
 
         GameDataManager.ManageTool(nowCode, nowReinforceCount, -1);
         
-        if (GameManager.Instance?.toolManager != null)
+        if (GameManager?.toolManager != null)
         {
-            GameManager.Instance.toolManager.ToolPutInChest();
-            GameManager.Instance.toolManager.MakeTool(nowCode, nowReinforceCount);
+            GameManager.toolManager.ToolPutInChest();
+            GameManager.toolManager.MakeTool(nowCode, nowReinforceCount);
         }
         
         NowImfoUpdate();
+        RequestUIUpdate();
     }
 
     /// <summary>
@@ -403,19 +403,21 @@ public class ChestPanel : BasePanel
     {
         if (GameDataManager == null) return;
 
-        if (GameManager.Instance?.toolManager != null)
+        if (GameManager?.toolManager != null)
         {
-            GameManager.Instance.toolManager.SellTool(nowCode, nowReinforceCount);
+            GameManager.toolManager.SellTool(nowCode, nowReinforceCount);
         }
         
         GameDataManager.ManageTool(nowCode, nowReinforceCount, -1);
+        
+        // UI 업데이트
+        RequestUIUpdate();
         
         // 아이템이 모두 팔렸는지 확인
         if (GameDataManager.ManageTool(nowCode, nowReinforceCount) == 0)
         {
             // 더 이상 아이템이 없으므로 패널 닫기
-            if (chestPanel != null)
-                chestPanel.SetActive(false);
+            CloseChestPanel();
         }
     }
 
@@ -450,13 +452,12 @@ public class ChestPanel : BasePanel
     /// </summary>
     public void UseItem()
     {
-        if (GameManager.Instance?.toolManager != null)
+        if (GameManager?.toolManager != null)
         {
-            GameManager.Instance.toolManager.ActiveItem(nowCode);
+            GameManager.toolManager.ActiveItem(nowCode);
         }
         
-        if (gameObject != null)
-            gameObject.SetActive(false);
+        ClosePanel();
     }
 
     /// <summary>
@@ -464,13 +465,12 @@ public class ChestPanel : BasePanel
     /// </summary>
     public void DisuseItem()
     {
-        if (GameManager.Instance?.toolManager != null)
+        if (GameManager?.toolManager != null)
         {
-            GameManager.Instance.toolManager.DisableItem(nowCode);
+            GameManager.toolManager.DisableItem(nowCode);
         }
         
-        if (gameObject != null)
-            gameObject.SetActive(false);
+        ClosePanel();
     }
 
     /// <summary>
@@ -478,13 +478,12 @@ public class ChestPanel : BasePanel
     /// </summary>
     public void SellItem()
     {
-        if (GameManager.Instance != null)
+        if (GameManager?.UiManager != null)
         {
-            GameManager.Instance.SellSetSlider(nowCode);
+            GameManager.UiManager.SellSetSlider(nowCode);
         }
         
-        if (gameObject != null)
-            gameObject.SetActive(false);
+        ClosePanel();
     }
 
     /// <summary>
@@ -547,5 +546,32 @@ public class ChestPanel : BasePanel
         // 드롭다운 값 초기화
         dropdown.value = 1;
         dropdown.value = 0;
+    }
+
+    /// <summary>
+    /// 상자 패널 닫기
+    /// </summary>
+    private void CloseChestPanel()
+    {
+        if (chestPanel != null)
+            chestPanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// 툴 강화 패널 닫기
+    /// </summary>
+    private void CloseToolReinPanel()
+    {
+        if (toolReinPanel != null)
+            toolReinPanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// 패널 닫기 (자신을 비활성화)
+    /// </summary>
+    private void ClosePanel()
+    {
+        if (gameObject != null)
+            gameObject.SetActive(false);
     }
 }

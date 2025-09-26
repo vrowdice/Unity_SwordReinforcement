@@ -9,10 +9,12 @@ public abstract class BasePanel : MonoBehaviour, IUIPanel
 {
     protected GameDataManager gameDataManager = null;
     protected IUIManager mainUiManager = null;
+    protected GameManager gameManager = null;
 
     // 프로퍼티들
     public GameDataManager GameDataManager => gameDataManager;
     public IUIManager MainUiManager => mainUiManager;
+    protected GameManager GameManager => gameManager;
 
     /// <summary>
     /// 패널이 열릴 때 호출되는 공통 로직
@@ -30,6 +32,7 @@ public abstract class BasePanel : MonoBehaviour, IUIPanel
 
         gameDataManager = argDataManager;
         mainUiManager = argUIManager;
+        gameManager = GameManager.Instance; // GameManager 인스턴스 캐시
 
         // 패널 활성화
         gameObject.SetActive(true);
@@ -60,5 +63,22 @@ public abstract class BasePanel : MonoBehaviour, IUIPanel
     protected virtual void OnPanelClose()
     {
         // 하위 클래스에서 오버라이드
+    }
+
+    /// <summary>
+    /// 경고 메시지 표시
+    /// </summary>
+    /// <param name="message">표시할 메시지</param>
+    protected void ShowWarning(string message)
+    {
+        gameManager?.Warning(message);
+    }
+
+    /// <summary>
+    /// UI 업데이트 요청
+    /// </summary>
+    protected void RequestUIUpdate()
+    {
+        mainUiManager?.UpdateAllMainText();
     }
 } 

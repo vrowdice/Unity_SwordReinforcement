@@ -30,10 +30,13 @@ public class ChestBtn : MonoBehaviour
     {
         if(code <= 0)
         {
-            GameManager.Instance.Warning("존재하지 않습니다.");
+            var gameManager = GameManager.Instance;
+            gameManager?.Warning("존재하지 않습니다.");
             return;
         }
-        GameManager.Instance.chestManager.ChestBtn(code);
+        
+        var chestManager = GameManager.Instance?.chestManager;
+        chestManager?.ChestBtn(code);
     }
 
     /// <summary>

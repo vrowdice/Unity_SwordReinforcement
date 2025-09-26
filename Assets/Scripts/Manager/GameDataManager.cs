@@ -809,7 +809,6 @@ public class GameDataManager : MonoBehaviour
             {
                 playerData.bronze = Math.Max(0, value);
                 OnBronzeChanged?.Invoke(playerData.bronze);
-                UpdateBronzeUI();
             }
         }
     }
@@ -826,7 +825,6 @@ public class GameDataManager : MonoBehaviour
             {
                 playerData.gold = Math.Max(0, value);
                 OnGoldChanged?.Invoke(playerData.gold);
-                UpdateGoldUI();
             }
         }
     }
@@ -843,7 +841,6 @@ public class GameDataManager : MonoBehaviour
             {
                 playerData.level = Math.Max(0, value);
                 OnLevelChanged?.Invoke(playerData.level);
-                UpdateLevelUI();
             }
         }
     }
@@ -860,7 +857,6 @@ public class GameDataManager : MonoBehaviour
             {
                 playerData.currentExp = Math.Max(0, value);
                 OnExpChanged?.Invoke(playerData.currentExp, playerData.maxExp);
-                UpdateExpUI();
             }
         }
     }
@@ -877,49 +873,11 @@ public class GameDataManager : MonoBehaviour
             {
                 playerData.maxExp = Math.Max(1, value);
                 OnExpChanged?.Invoke(playerData.currentExp, playerData.maxExp);
-                UpdateExpUI();
             }
         }
     }
 
-    // ========== UI 업데이트 헬퍼 메서드들 ==========
 
-    private void UpdateBronzeUI()
-    {
-        var gameManager = GameManager.Instance;
-        if (gameManager?.BronzeText != null)
-        {
-            gameManager.BronzeText.text = $"브론즈 (B) : {playerData.bronze:#,###}";
-        }
-    }
-
-    private void UpdateGoldUI()
-    {
-        var gameManager = GameManager.Instance;
-        if (gameManager?.GoldText != null)
-        {
-            gameManager.GoldText.text = $"골드 (G) : {playerData.gold:#,###}";
-        }
-    }
-
-    private void UpdateLevelUI()
-    {
-        var gameManager = GameManager.Instance;
-        if (gameManager?.levelText != null)
-        {
-            gameManager.levelText.text = $"LV.{playerData.level}";
-        }
-    }
-
-    private void UpdateExpUI()
-    {
-        var gameManager = GameManager.Instance;
-        if (gameManager?.expSlider != null)
-        {
-            gameManager.expSlider.maxValue = playerData.maxExp;
-            gameManager.expSlider.value = playerData.currentExp;
-        }
-    }
 
     /// <summary>
     /// 게임 종료 시 자동 저장

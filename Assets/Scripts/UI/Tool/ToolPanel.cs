@@ -5,66 +5,57 @@ using UnityEngine.UI;
 
 public class ToolPanel : BasePanel
 {
-    /// <summary>
-    /// 매인패널
-    /// </summary>
-    public GameObject toolPanel = null;
-
-    /// <summary>
-    /// 도구 패널
-    /// </summary>
-    public GameObject chestToolPanel = null;
-
+    [Header("Tool Panel UI Components")]
     /// <summary>
     /// 개선 버튼
     /// </summary>
-    GameObject improveBtn = null;
+    [SerializeField] GameObject improveBtn = null;
 
     /// <summary>
     /// 검 이미지
     /// </summary>
-    Image toolImage = null;
+    [SerializeField] Image toolImage = null;
 
     /// <summary>
     /// 검 텍스트
     /// </summary>
-    Text toolText = null;
+    [SerializeField] Text toolText = null;
 
     /// <summary>
     /// 판매비용 택스트
     /// </summary>
-    Text sellCostTxt = null;
+    [SerializeField] Text sellCostTxt = null;
 
     /// <summary>
     /// 강화 비용
     /// </summary>
-    Text reinforceCostTxt = null;
+    [SerializeField] Text reinforceCostTxt = null;
 
     /// <summary>
     /// 강화 확률
     /// </summary>
-    Text reinforcePercentTxt = null;
+    [SerializeField] Text reinforcePercentTxt = null;
+
+    /// <summary>
+    /// 현재 모드 텍스트
+    /// </summary>
+    [SerializeField] Text modeText = null;
+
+    /// <summary>
+    /// 상자 패널의 검 이미지
+    /// </summary>
+    [SerializeField] Image chestToolImg;
+
+    /// <summary>
+    /// 상자 패널의 검 설명
+    /// </summary>
+    [SerializeField] Text chestToolExp;
 
     [Header("Item Quick Use UI")]
     public GameObject icon = null;
     public GameObject itemIconSortPanel = null;
     public GameObject itemQuickUseBtn = null;
     public GameObject itemQuickUseContent = null;
-
-    /// <summary>
-    /// 현재 모드 텍스트
-    /// </summary>
-    Text modeText = null;
-
-    /// <summary>
-    /// 상자 패널의 검 이미지
-    /// </summary>
-    Image chestToolImg;
-
-    /// <summary>
-    /// 상자 패널의 검 설명
-    /// </summary>
-    Text chestToolExp;
 
     /// <summary>
     /// 현재 툴 타입
@@ -138,14 +129,21 @@ public class ToolPanel : BasePanel
     /// </summary>
     void Setting()
     {
-        toolImage = toolPanel.transform.Find("ToolImage").gameObject.GetComponent<Image>();
-        modeText = toolPanel.transform.Find("ModeText").gameObject.GetComponent<Text>();
-        toolText = toolPanel.transform.Find("ToolText").gameObject.GetComponent<Text>();
-        sellCostTxt = toolPanel.transform.Find("SellCostText").gameObject.GetComponent<Text>();
-        reinforceCostTxt = toolPanel.transform.Find("CostText").gameObject.GetComponent<Text>();
-        reinforcePercentTxt = toolPanel.transform.Find("PercentText").gameObject.GetComponent<Text>();
-        modeText = toolPanel.transform.Find("ModeText").gameObject.GetComponent<Text>();
-        improveBtn = toolPanel.transform.Find("ImproveBtn").gameObject;
+        // SerializeField로 인스펙터에서 할당하므로 Find 코드들을 제거하거나 null 체크로 대체
+        if (toolImage == null)
+            toolImage = gameObject.transform.Find("ToolImage")?.GetComponent<Image>();
+        if (modeText == null)
+            modeText = gameObject.transform.Find("ModeText")?.GetComponent<Text>();
+        if (toolText == null)
+            toolText = gameObject.transform.Find("ToolText")?.GetComponent<Text>();
+        if (sellCostTxt == null)
+            sellCostTxt = gameObject.transform.Find("SellCostText")?.GetComponent<Text>();
+        if (reinforceCostTxt == null)
+            reinforceCostTxt = gameObject.transform.Find("CostText")?.GetComponent<Text>();
+        if (reinforcePercentTxt == null)
+            reinforcePercentTxt = gameObject.transform.Find("PercentText")?.GetComponent<Text>();
+        if (improveBtn == null)
+            improveBtn = gameObject.transform.Find("ImproveBtn")?.gameObject;
 
         SelectToolType(StuffType.ToolType.Sword);
         ChangeMode(PanelType.ImproveType.Upgrade);
@@ -445,7 +443,7 @@ public class ToolPanel : BasePanel
         
         nowChestToolRein = argRein;
 
-        gameObject.SetActive(true);
+        base.gameObject.SetActive(true);
         chestToolImg.sprite = GameDataManager.Instance.GetToolData(nowChestToolCode).image;
         chestToolImg.GetComponent<Image>().preserveAspect = true;
         chestToolExp.GetComponentInChildren<Text>().text = GameDataManager.Instance.GetToolData(nowChestToolCode).explanation;
@@ -744,6 +742,7 @@ public class ToolPanel : BasePanel
         // UI 업데이트
         UpdateQuickItemUse();
         GameManager.Instance?.chestManager?.NowImfoUpdate();
+        GameManager.Instance?.UiManager?.UpdateAllMainText();
 
         // 아이콘 생성
         CreateItemIcon(argItemCode);
@@ -778,6 +777,7 @@ public class ToolPanel : BasePanel
         
         // UI 업데이트
         UpdateQuickItemUse();
+        GameManager.Instance?.UiManager?.UpdateAllMainText();
         
         // 아이콘 제거
         RemoveItemIcon(argItemCode);
