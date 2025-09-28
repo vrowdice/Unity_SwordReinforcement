@@ -6,116 +6,27 @@ using UnityEngine.UI;
 public class ToolPanel : BasePanel
 {
     [Header("Tool Panel UI Components")]
-    /// <summary>
-    /// 개선 버튼
-    /// </summary>
-    [SerializeField] GameObject improveBtn = null;
-
-    /// <summary>
-    /// 검 이미지
-    /// </summary>
     [SerializeField] Image toolImage = null;
-
-    /// <summary>
-    /// 검 텍스트
-    /// </summary>
     [SerializeField] Text toolText = null;
+    [SerializeField] Text percentText = null;
+    [SerializeField] Text costText = null;
+    [SerializeField] Text sellCostText = null;
+    [SerializeField] Text modeText = null;
 
-    /// <summary>
-    /// 강화 확률
-    /// </summary>
-    [SerializeField] Text reinforcePercentTxt = null;
+    [Header("Item Use Panel")]
+    [SerializeField] private GameObject toolItemUsePanelPrefab = null;
+    private ToolItemUsePanel toolItemUsePanel = null;
 
-    /// <summary>
-    /// 판매비용 택스트
-    /// </summary>
-    [SerializeField] Text sellCostTxt = null;
-
-    /// <summary>
-    /// 강화 비용
-    /// </summary>
-    [SerializeField] Text reinforceCostTxt = null;
-
-    /// <summary>
-    /// 현재 모드 텍스트
-    /// </summary>
-    [SerializeField] Text nowRainforceModeText = null;
-
-    /// <summary>
-    /// 상자 패널의 검 이미지
-    /// </summary>
-    [SerializeField] Image chestToolImg;
-
-    /// <summary>
-    /// 상자 패널의 검 설명
-    /// </summary>
-    [SerializeField] Text chestToolExp;
-
-    [Header("Item Quick Use UI")]
-    public GameObject icon = null;
-    public GameObject itemIconSortPanel = null;
-    public GameObject itemQuickUseBtn = null;
-    public GameObject itemQuickUseContent = null;
-
-    /// <summary>
-    /// 현재 툴 타입
-    /// </summary>
     ToolType.TYPE nowToolType = new ToolType.TYPE();
-
-    /// <summary>
-    /// 현재 도구 패널 모드
-    /// </summary>
     ImproveType.TYPE nowImproveMode = new ImproveType.TYPE();
-
-    /// <summary>
-    /// 현재 강화횟수
-    /// </summary>
     private int nowToolCode = 0;
-
-    /// <summary>
-    /// 현재 툴 강화횟수
-    /// </summary>
     private int nowToolRein = 0;
-
-    /// <summary>
-    /// 현재 선택한 툴 코드
-    /// </summary>
-    int nowChestToolCode = 0;
-
-    /// <summary>
-    /// 현재 선택한 툴 강화횟수
-    /// </summary>
-    int nowChestToolRein = 0;
-
-    /// <summary>
-    /// 강화 확률
-    /// </summary>
-    float reinforcePercent = 0.0f;
-
-    /// <summary>
-    /// 추가될 강화 확률
-    /// </summary>
-    float addRP = 0.0f;
-
-    /// <summary>
-    /// 검 파괴방지 플래그
-    /// </summary>
-    bool noDestroyFlag = false;
-
-    /// <summary>
-    /// 판매 비용
-    /// </summary>
-    long sellCost = 0;
-
-    /// <summary>
-    /// 강화 비용
-    /// </summary>
-    long reinforceCost = 0;
-
-    /// <summary>
-    /// 무작위 값을 산출할 볌위
-    /// </summary>
-    public float reinforceRange = 0.0f;
+    private float reinforcePercent = 0.0f;
+    private float addRP = 0.0f;
+    private bool noDestroyFlag = false;
+    private long sellCost = 0;
+    private long reinforceCost = 0;
+    private float reinforceRange = 0.0f;
 
     protected override void OnPanelOpen()
     {
@@ -129,24 +40,34 @@ public class ToolPanel : BasePanel
     /// </summary>
     void Setting()
     {
-        // SerializeField로 인스펙터에서 할당하므로 Find 코드들을 제거하거나 null 체크로 대체
-        if (toolImage == null)
-            toolImage = gameObject.transform.Find("ToolImage")?.GetComponent<Image>();
-        if (nowRainforceModeText == null)
-            nowRainforceModeText = gameObject.transform.Find("ModeText")?.GetComponent<Text>();
-        if (toolText == null)
-            toolText = gameObject.transform.Find("ToolText")?.GetComponent<Text>();
-        if (sellCostTxt == null)
-            sellCostTxt = gameObject.transform.Find("SellCostText")?.GetComponent<Text>();
-        if (reinforceCostTxt == null)
-            reinforceCostTxt = gameObject.transform.Find("CostText")?.GetComponent<Text>();
-        if (reinforcePercentTxt == null)
-            reinforcePercentTxt = gameObject.transform.Find("PercentText")?.GetComponent<Text>();
-        if (improveBtn == null)
-            improveBtn = gameObject.transform.Find("ImproveBtn")?.gameObject;
-
+        InitializeItemUsePanel();
         SelectToolType(ToolType.TYPE.Sword);
         ChangeMode(ImproveType.TYPE.Upgrade);
+    }
+
+    /// <summary>
+    /// 아이템 사용 패널 초기화
+    /// </summary>
+    private void InitializeItemUsePanel()
+    {
+        if (toolItemUsePanelPrefab != null)
+        {
+            toolItemUsePanel = toolItemUsePanelPrefab.GetComponent<ToolItemUsePanel>();
+            if (toolItemUsePanel == null)
+            {
+                Debug.LogError("ToolItemUsePanel component not found on toolItemUsePanelPrefab!");
+            }
+            else
+            {
+                // ToolPanel 자신과 GameDataManager를 전달
+                toolItemUsePanel.Initialize(this, GameDataManager);
+                Debug.Log("ToolItemUsePanel initialized successfully in ToolPanel!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("toolItemUsePanelPrefab is not assigned in ToolPanel!");
+        }
     }
 
     /// <summary>
@@ -209,8 +130,7 @@ public class ToolPanel : BasePanel
             _string = string.Format("강화");
         }
 
-        nowRainforceModeText.text = string.Format(_string + " 모드");
-        improveBtn.transform.GetChild(0).gameObject.GetComponent<Text>().text = string.Format(_string + "하기");
+        modeText.text = string.Format(_string + " 모드");
     }
 
     /// <summary>
@@ -412,15 +332,15 @@ public class ToolPanel : BasePanel
         if (IsAddRP <= 0)
         {
             IsAddRP = 0;
-            reinforcePercentTxt.text = string.Format(_string + "확률 : {0:.0}", IsImprovePercent);
+            percentText.text = string.Format(_string + "확률 : {0:.0}", IsImprovePercent);
         }
         else
         {
-            reinforcePercentTxt.text = string.Format(_string + "확률 : {0:.0}", IsImprovePercent + " + " + IsAddRP);
+            percentText.text = string.Format(_string + "확률 : {0:.0}", IsImprovePercent + " + " + IsAddRP);
         }
 
-        sellCostTxt.text = string.Format("판매비용 : {0}", sellCost);
-        reinforceCostTxt.text = string.Format(_string + "비용 : {0}", reinforceCost);
+        sellCostText.text = string.Format("판매비용 : {0}", sellCost);
+        costText.text = string.Format(_string + "비용 : {0}", reinforceCost);
     }
 
     /// <summary>
@@ -441,12 +361,7 @@ public class ToolPanel : BasePanel
             return;
         }
         
-        nowChestToolRein = argRein;
-
         base.gameObject.SetActive(true);
-        chestToolImg.sprite = GameDataManager.Instance.GetToolData(nowChestToolCode).image;
-        chestToolImg.GetComponent<Image>().preserveAspect = true;
-        chestToolExp.GetComponentInChildren<Text>().text = GameDataManager.Instance.GetToolData(nowChestToolCode).explanation;
     }
 
     /// <summary>
@@ -708,331 +623,5 @@ public class ToolPanel : BasePanel
         {
             noDestroyFlag = value;
         }
-    }
-
-    // ===== 아이템 관련 기능들 (ItemPanel에서 이양) =====
-
-    /// <summary>
-    /// 아이템 활성화
-    /// </summary>
-    /// <param name="argItemCode">아이템 코드</param>
-    public void ActiveItem(int argItemCode)
-    {
-        if (GameDataManager == null) return;
-
-        var itemData = GameDataManager.GetItemData(argItemCode);
-        if (itemData == null || itemData.amount <= 0 || itemData.isInUse)
-        {
-            GameManager.Instance?.Warning("아이템 사용이 불가능합니다.");
-            return;
-        }
-        
-        // 아이템 사용 상태로 변경
-        if (!GameDataManager.SetItemUsage(argItemCode, true))
-        {
-            return;
-        }
-
-        // 아이템 갯수 감소
-        GameDataManager.ChangeItemAmount(argItemCode, -1);
-        
-        // 아이템 효과 적용
-        ApplyItemEffect(argItemCode);
-        
-        // UI 업데이트
-        UpdateQuickItemUse();
-        GameManager.Instance?.chestManager?.NowImfoUpdate();
-        GameManager.Instance?.UiManager?.UpdateAllMainText();
-
-        // 아이콘 생성
-        CreateItemIcon(argItemCode);
-    }
-
-    /// <summary>
-    /// 아이템 비활성화
-    /// </summary>
-    /// <param name="argItemCode">아이템 코드</param>
-    public void DisableItem(int argItemCode)
-    {
-        if (GameDataManager == null) return;
-
-        var itemData = GameDataManager.GetItemData(argItemCode);
-        if (itemData == null || !itemData.isInUse)
-        {
-            GameManager.Instance?.Warning("아이템 비활성화가 불가능합니다.");
-            return;
-        }
-        
-        // 아이템 사용 해제
-        if (!GameDataManager.SetItemUsage(argItemCode, false))
-        {
-            return;
-        }
-
-        // 아이템 갯수 복구
-        GameDataManager.ChangeItemAmount(argItemCode, 1);
-        
-        // 아이템 효과 제거
-        RemoveItemEffect(argItemCode);
-        
-        // UI 업데이트
-        UpdateQuickItemUse();
-        GameManager.Instance?.UiManager?.UpdateAllMainText();
-        
-        // 아이콘 제거
-        RemoveItemIcon(argItemCode);
-    }
-
-    /// <summary>
-    /// 아이템 효과 적용
-    /// </summary>
-    /// <param name="itemCode">아이템 코드</param>
-    private void ApplyItemEffect(int itemCode)
-    {
-        var itemMasterData = GameDataManager?.GetItemMasterData(itemCode);
-        if (itemMasterData == null) return;
-
-        // 아이템별 효과 적용 로직
-        switch (itemCode)
-        {
-            case 30000: // 예시: 경험치 증가 아이템
-                // 경험치 증가 효과 적용
-                ApplyExperienceBoost();
-                break;
-            case 30001: // 예시: 골드 증가 아이템
-                // 골드 증가 효과 적용
-                ApplyGoldBoost();
-                break;
-            case 30002: // 예시: 강화 확률 증가 아이템
-                // 강화 확률 증가 효과 적용
-                ApplyReinforceBoost();
-                break;
-            // 다른 아이템들의 효과 추가...
-            default:
-                Debug.Log($"아이템 효과가 정의되지 않음: {itemCode}");
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 아이템 효과 제거
-    /// </summary>
-    /// <param name="itemCode">아이템 코드</param>
-    private void RemoveItemEffect(int itemCode)
-    {
-        var itemMasterData = GameDataManager?.GetItemMasterData(itemCode);
-        if (itemMasterData == null) return;
-
-        // 아이템별 효과 제거 로직
-        switch (itemCode)
-        {
-            case 30000: // 예시: 경험치 증가 아이템
-                // 경험치 증가 효과 제거
-                RemoveExperienceBoost();
-                break;
-            case 30001: // 예시: 골드 증가 아이템
-                // 골드 증가 효과 제거
-                RemoveGoldBoost();
-                break;
-            case 30002: // 예시: 강화 확률 증가 아이템
-                // 강화 확률 증가 효과 제거
-                RemoveReinforceBoost();
-                break;
-            // 다른 아이템들의 효과 제거...
-            default:
-                Debug.Log($"아이템 효과 제거가 정의되지 않음: {itemCode}");
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 아이템 아이콘 생성
-    /// </summary>
-    /// <param name="itemCode">아이템 코드</param>
-    private void CreateItemIcon(int itemCode)
-    {
-        var itemMasterData = GameDataManager.GetItemMasterData(itemCode);
-        if (itemMasterData == null || itemIconSortPanel == null) return;
-
-        if (icon == null) return;
-
-        GameObject newIcon = Instantiate(icon);
-        newIcon.transform.SetParent(itemIconSortPanel.transform);
-        newIcon.transform.localScale = Vector3.one;
-        newIcon.transform.SetAsFirstSibling();
-        
-        var imageComponent = newIcon.transform.Find("Image")?.GetComponent<Image>();
-        if (imageComponent != null)
-        {
-            imageComponent.sprite = itemMasterData.image;
-            imageComponent.preserveAspect = true;
-        }
-    }
-
-    /// <summary>
-    /// 아이템 아이콘 제거
-    /// </summary>
-    /// <param name="itemCode">아이템 코드</param>
-    private void RemoveItemIcon(int itemCode)
-    {
-        if (itemIconSortPanel == null || GameDataManager == null) return;
-
-        var usedItems = GameDataManager.GetUsedItems();
-        int iconIndex = usedItems.IndexOf(itemCode);
-        if (iconIndex >= 0 && iconIndex < itemIconSortPanel.transform.childCount)
-        {
-            Destroy(itemIconSortPanel.transform.GetChild(iconIndex).gameObject);
-        }
-    }
-
-    /// <summary>
-    /// 사용한 아이템과 효과 제거
-    /// </summary>
-    public void UseItemDestroy()
-    {
-        if (GameDataManager == null) return;
-
-        var usedItems = GameDataManager.GetUsedItems();
-        for(int i = usedItems.Count - 1; i >= 0; i--)
-        {
-            int itemCode = usedItems[i];
-            RemoveItemEffect(itemCode);
-            
-            // 아이콘 제거
-            if (itemIconSortPanel != null && 
-                i < itemIconSortPanel.transform.childCount)
-            {
-                Destroy(itemIconSortPanel.transform.GetChild(i).gameObject);
-            }
-        }
-        
-        // 사용 중인 아이템 목록 초기화
-        GameDataManager.ClearUsedItems();
-    }
-
-    /// <summary>
-    /// 빠른 아이템 사용 초기화
-    /// </summary>
-    public void InitializeQuickItemUse()
-    {
-        if (GameDataManager == null) return;
-
-        if (itemQuickUseContent == null) return;
-
-        // 기존 퀵 아이템 목록 초기화 (필요한 경우)
-        // 여기서는 프리팹에서 설정된 아이템 코드들을 사용
-        for(int i = 0; i < itemQuickUseContent.transform.childCount; i++)
-        {
-            var quickBtn = itemQuickUseContent.transform.GetChild(i).GetComponent<QuickItemUseBtn>();
-            if (quickBtn != null)
-            {
-                // 퀵 아이템 리스트에 추가 (중복 체크)
-                GameDataManager.AddQuickUseItem(quickBtn.ownitemCode);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 게임 데이터 매니저의 빠른아이템사용 정보 참조해 빠른아이템사용 콘텐츠에 추가
-    /// </summary>
-    public void LoadQuickItemUse()
-    {
-        if (GameDataManager == null || itemQuickUseBtn == null || itemQuickUseContent == null)
-            return;
-
-        var quickUseItems = GameDataManager.GetQuickUseItems();
-        for (int i = 0; i < quickUseItems.Count; i++)
-        {
-            int itemCode = quickUseItems[i];
-            var itemMasterData = GameDataManager.GetItemMasterData(itemCode);
-            if (itemMasterData == null) continue;
-
-            GameObject btn = Instantiate(itemQuickUseBtn);
-            btn.transform.SetParent(itemQuickUseContent.transform);
-            btn.transform.localScale = Vector3.one;
-            
-            var imageComponent = btn.transform.Find("ItemImage")?.GetComponent<Image>();
-            if (imageComponent != null)
-            {
-                imageComponent.sprite = itemMasterData.image;
-            }
-            
-            var textComponent = btn.transform.Find("ItemText")?.GetComponent<Text>();
-            if (textComponent != null)
-            {
-                textComponent.text = itemMasterData.name;
-            }
-            
-            var quickBtnComponent = btn.GetComponent<QuickItemUseBtn>();
-            if (quickBtnComponent != null)
-            {
-                quickBtnComponent.ownitemCode = itemCode;
-                quickBtnComponent.ownToggle = btn.transform.Find("Toggle")?.GetComponent<Toggle>();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 빠른 아이템 사용 새로고침
-    /// </summary>
-    public void UpdateQuickItemUse()
-    {
-        if (GameDataManager == null || itemQuickUseContent == null)
-            return;
-
-        var quickUseItems = GameDataManager.GetQuickUseItems();
-        for(int i = 0; i < quickUseItems.Count && i < itemQuickUseContent.transform.childCount; i++)
-        {
-            int itemCode = quickUseItems[i];
-            var quickBtnComponent = itemQuickUseContent.transform.GetChild(i).GetComponent<QuickItemUseBtn>();
-            
-            if (quickBtnComponent?.ownToggle != null)
-            {
-                var itemData = GameDataManager.GetItemData(itemCode);
-                quickBtnComponent.ownToggle.isOn = itemData?.isInUse ?? false;
-            }
-        }
-    }
-
-    // 구체적인 아이템 효과 메서드들
-    private void ApplyExperienceBoost()
-    {
-        // 경험치 증가 효과 구현
-        // 예: 경험치 획득량 2배
-        Debug.Log("경험치 증가 효과 적용");
-    }
-
-    private void RemoveExperienceBoost()
-    {
-        // 경험치 증가 효과 제거
-        Debug.Log("경험치 증가 효과 제거");
-    }
-
-    private void ApplyGoldBoost()
-    {
-        // 골드 증가 효과 구현
-        // 예: 골드 획득량 1.5배
-        Debug.Log("골드 증가 효과 적용");
-    }
-
-    private void RemoveGoldBoost()
-    {
-        // 골드 증가 효과 제거
-        Debug.Log("골드 증가 효과 제거");
-    }
-
-    private void ApplyReinforceBoost()
-    {
-        // 강화 확률 증가 효과 구현
-        IsAddRP += 10.0f; // 강화 확률 10% 증가
-        Debug.Log("강화 확률 증가 효과 적용");
-    }
-
-    private void RemoveReinforceBoost()
-    {
-        // 강화 확률 증가 효과 제거
-        IsAddRP -= 10.0f; // 강화 확률 증가 해제
-        if (IsAddRP < 0) IsAddRP = 0;
-        Debug.Log("강화 확률 증가 효과 제거");
     }
 }

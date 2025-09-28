@@ -595,7 +595,7 @@ public class GameDataManager : MonoBehaviour
 
     // ========== UI 업데이트 메서드들 ==========
 
-    /// <summary>
+/*    /// <summary>
     /// 상자 업데이트
     /// </summary>
     public void UpdateChest(ChestType.TYPE argType)
@@ -709,7 +709,7 @@ public class GameDataManager : MonoBehaviour
                 false
             );
         }
-    }
+    }*/
     
     /// <summary>
     /// 브론즈 사용 가능 여부 확인 및 차감

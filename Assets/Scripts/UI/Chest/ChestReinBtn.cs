@@ -40,9 +40,6 @@ public class ChestReinBtn : MonoBehaviour
             gameManager?.Warning("존재하지 않습니다.");
             return;
         }
-        
-        var chestManager = GameManager.Instance?.chestManager;
-        chestManager?.SelectToolRein(toolRein);
     }
 
     /// <summary>

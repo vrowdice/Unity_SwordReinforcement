@@ -35,8 +35,8 @@ public class ChestBtn : MonoBehaviour
             return;
         }
         
-        var chestManager = GameManager.Instance?.chestManager;
-        chestManager?.ChestBtn(code);
+/*        var chestManager = GameManager.Instance?.chestManager;
+        chestManager?.ChestBtn(code);*/
     }
 
     /// <summary>

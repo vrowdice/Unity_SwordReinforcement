@@ -5,60 +5,19 @@ using UnityEngine.UI;
 
 public class StorePanel : BasePanel
 {
-    /// <summary>
-    /// 상점 콘텐츠들
-    /// </summary>
-    public GameObject[] storContents = null;
-
-    /// <summary>
-    /// 아이템 패널
-    /// </summary>
+    [SerializeField] private GameObject exchangePanelPrefab = null;
+    [SerializeField] private GameObject[] storSelectBtn = null;
+    [SerializeField] private GameObject[] storContents = null;
     public GameObject itemBuySellPanel = null;
-
-    /// <summary>
-    /// 상점 아이템 버튼
-    /// </summary>
     public GameObject storBtn = null;
-
-    /// <summary>
-    /// 자신의 아이템 코드
-    /// </summary>
+    private ExchangePanel exchangePopupPanel = null;
     int nowItemCode = -1;
 
-    /// <summary>
-    /// 상점 스크롤 뷰
-    /// </summary>
     GameObject[] storScrollView = null;
-
-    /// <summary>
-    /// 상점 콘텐츠 선택 버튼
-    /// </summary>
-    [SerializeField]
-    GameObject[] storSelectBtn = null;
-
-    /// <summary>
-    /// 아이템 이미지
-    /// </summary>
     Image itemImage = null;
-
-    /// <summary>
-    /// 아이템 이름 텍스트
-    /// </summary>
     Text itemName = null;
-
-    /// <summary>
-    /// 아이템 설명 텍스트
-    /// </summary>
     Text itemExplain = null;
-
-    /// <summary>
-    /// 아이템 가격 텍스트
-    /// </summary>
     Text itemPrice = null;
-
-    /// <summary>
-    /// 아이템 갯수 텍스트
-    /// </summary>
     Text itemAmount = null;
 
     protected override void OnPanelOpen()
@@ -79,12 +38,70 @@ public class StorePanel : BasePanel
         InitializeArrays();
         InitializeUIComponents();
         InitializeScrollViews();
+        InitializeExchangePanel();
         
-        nowItemCode = 30000; // 기본 아이템 코드
+        nowItemCode = 30000;
         
         UpdateBuySellPanel(nowItemCode);
         UpdateStorItem();
         ChangeStorView(0);
+    }
+
+    /// <summary>
+    /// Exchange 팝업 패널 초기화
+    /// </summary>
+    private void InitializeExchangePanel()
+    {
+        if (exchangePanelPrefab != null)
+        {
+            exchangePopupPanel = exchangePanelPrefab.GetComponent<ExchangePanel>();
+            if (exchangePopupPanel == null)
+            {
+                Debug.LogError("ExchangePopupPanel component not found on exchangePanelPrefab!");
+            }
+            else
+            {
+                // StorePanel 자신을 부모로 전달
+                exchangePopupPanel.Initialize(this);
+                Debug.Log("ExchangePopupPanel initialized successfully in StorePanel!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("exchangePanelPrefab is not assigned in StorePanel!");
+        }
+    }
+
+    /// <summary>
+    /// 구매 슬라이더 설정
+    /// </summary>
+    /// <param name="itemCode">아이템 코드</param>
+    public void BuySetSlider(int itemCode)
+    {
+        if (exchangePopupPanel != null)
+        {
+            exchangePopupPanel.BuySetSlider(itemCode);
+        }
+        else
+        {
+            Debug.LogError("ExchangePopupPanel is not initialized in StorePanel!");
+        }
+    }
+
+    /// <summary>
+    /// 판매 슬라이더 설정
+    /// </summary>
+    /// <param name="itemCode">아이템 코드</param>
+    public void SellSetSlider(int itemCode)
+    {
+        if (exchangePopupPanel != null)
+        {
+            exchangePopupPanel.SellSetSlider(itemCode);
+        }
+        else
+        {
+            Debug.LogError("ExchangePopupPanel is not initialized in StorePanel!");
+        }
     }
 
     /// <summary>
@@ -123,7 +140,6 @@ public class StorePanel : BasePanel
         storScrollView[1] = transform.Find("Scroll View Stor Last")?.gameObject;
         storScrollView[2] = transform.Find("Scroll View Stor Cash")?.gameObject;
 
-        // null 체크
         for (int i = 0; i < storScrollView.Length; i++)
         {
             if (storScrollView[i] == null)
@@ -146,7 +162,6 @@ public class StorePanel : BasePanel
 
         nowItemCode = argItemCode;
 
-        // 아이템 마스터 데이터 조회
         var itemMasterData = GameDataManager.GetItemMasterData(argItemCode);
         if (itemMasterData == null)
         {
@@ -154,11 +169,9 @@ public class StorePanel : BasePanel
             return;
         }
 
-        // 유저 아이템 데이터 조회
         var userItemData = GameDataManager.GetItemData(argItemCode);
         int itemAmount = userItemData?.amount ?? 0;
 
-        // UI 업데이트
         UpdateItemDisplay(itemMasterData, itemAmount);
     }
 
@@ -208,24 +221,15 @@ public class StorePanel : BasePanel
             return;
         }
 
-        // 기존 버튼들 정리
         ClearExistingButtons();
 
-        int[] counts = new int[3]; // 각 카테고리별 아이템 수
+        int[] counts = new int[3];
 
-        // 모든 아이템 데이터를 순회하면서 상점 버튼 생성
         var allItems = GetAllItemData();
         foreach (var itemPair in allItems)
         {
             int itemCode = itemPair.Key;
             ItemData itemData = itemPair.Value;
-
- /*           int categoryIndex = GetItemCategoryIndex(itemData);
-            if (categoryIndex >= 0 && categoryIndex < storContents.Length)
-            {
-                CreateStoreButton(itemCode, itemData, categoryIndex);
-                counts[categoryIndex]++;
-            }*/
         }
 
         Debug.Log($"Store items created - Disposable: {counts[0]}, Lasting: {counts[1]}, Cash: {counts[2]}");
@@ -240,7 +244,6 @@ public class StorePanel : BasePanel
         {
             if (storContents[i] != null)
             {
-                // 기존 자식 오브젝트들 제거 (런타임에서 안전하게)
                 for (int j = storContents[i].transform.childCount - 1; j >= 0; j--)
                 {
                     var child = storContents[i].transform.GetChild(j);
@@ -267,27 +270,6 @@ public class StorePanel : BasePanel
     }
 
     /// <summary>
-    /// 아이템 카테고리 인덱스 조회
-    /// </summary>
-    /// <param name="itemData">아이템 데이터</param>
-    /// <returns>카테고리 인덱스 (0: 일회용, 1: 지속형, 2: 캐시)</returns>
-/*    private int GetItemCategoryIndex(ItemData itemData)
-    {
-        if (itemData.valueType == StuffType.ItemBuyType.Csh)
-        {
-            return 2; // 캐시 아이템
-        }
-        else if (itemData.useType == StuffType.ItemUseType.One)
-        {
-            return 0; // 일회용 아이템
-        }
-        else
-        {
-            return 1; // 지속형 아이템
-        }
-    }*/
-
-    /// <summary>
     /// 상점 버튼 생성
     /// </summary>
     /// <param name="itemCode">아이템 코드</param>
@@ -305,10 +287,8 @@ public class StorePanel : BasePanel
         btn.transform.SetParent(storContents[categoryIndex].transform);
         btn.transform.localScale = Vector3.one;
 
-        // 버튼 UI 설정
         SetupButtonUI(btn, itemData);
 
-        // 버튼 클릭 이벤트 설정
         var button = btn.GetComponent<Button>();
         if (button != null)
         {
@@ -323,17 +303,14 @@ public class StorePanel : BasePanel
     /// <param name="itemData">아이템 데이터</param>
     private void SetupButtonUI(GameObject btn, ItemData itemData)
     {
-        // 이름 텍스트 설정
         var nameText = btn.transform.Find("NameText")?.GetComponent<Text>();
         if (nameText != null)
             nameText.text = itemData.name;
 
-        // 설명 텍스트 설정
         var explainText = btn.transform.Find("ExplainText")?.GetComponent<Text>();
         if (explainText != null)
             explainText.text = itemData.explanation;
 
-        // 이미지 설정
         var image = btn.transform.Find("Image")?.GetComponent<Image>();
         if (image != null)
         {
@@ -353,7 +330,7 @@ public class StorePanel : BasePanel
             return;
         }
 
-        GameManager.Instance?.UiManager?.BuySetSlider(nowItemCode);
+        BuySetSlider(nowItemCode);
     }
 
     /// <summary>
@@ -382,13 +359,12 @@ public class StorePanel : BasePanel
         
         if (!GameDataManager.TrySpendBronze(totalPrice))
         {
-            return; // 에러 메시지는 TrySpendBronze에서 처리
+            return;
         }
 
         GameDataManager.ChangeItemAmount(argItemCode, argAmount);
         UpdateBuySellPanel(argItemCode);
         
-        // UI 업데이트
         GameManager.Instance?.UiManager?.UpdateAllMainText();
     }
 
@@ -403,7 +379,7 @@ public class StorePanel : BasePanel
             return;
         }
 
-        GameManager.Instance?.UiManager?.SellSetSlider(nowItemCode);
+        SellSetSlider(nowItemCode);
     }
 
     /// <summary>
@@ -437,7 +413,6 @@ public class StorePanel : BasePanel
         var itemMasterData = GameDataManager.GetItemMasterData(argItemCode);
         if (itemMasterData == null) return;
 
-        // 판매가는 구매가의 70%
         long sellPrice = (long)(itemMasterData.price * argAmount * 0.7f);
         
         GameDataManager.AddBronze(sellPrice);
@@ -445,7 +420,6 @@ public class StorePanel : BasePanel
         
         UpdateBuySellPanel(argItemCode);
         
-        // UI 업데이트
         GameManager.Instance?.UiManager?.UpdateAllMainText();
     }
 
@@ -461,7 +435,6 @@ public class StorePanel : BasePanel
             return;
         }
 
-        // 모든 스크롤 뷰 비활성화
         for (int i = 0; i < storScrollView.Length; i++)
         {
             if (storScrollView[i] != null)
@@ -470,7 +443,6 @@ public class StorePanel : BasePanel
             }
         }
 
-        // 선택된 스크롤 뷰 활성화
         if (storScrollView[argIndex] != null)
         {
             storScrollView[argIndex].SetActive(true);

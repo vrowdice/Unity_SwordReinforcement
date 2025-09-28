@@ -37,13 +37,13 @@ public class QuickItemUseBtn : MonoBehaviour
             return;
         }
 
-        if (itemData.isInUse)
+/*        if (itemData.isInUse)
         {
             gameManager.toolManager.DisableItem(ownitemCode);
         }
         else
         {
             gameManager.toolManager.ActiveItem(ownitemCode);
-        }
+        }*/
     }
 }

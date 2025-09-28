@@ -5,39 +5,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Scripts and Panel")]
-    /// <summary>
-    /// 도구 매니저
-    /// </summary>
-    public ToolPanel toolManager = null;
-
-    // (제거됨) 아이템 매니저 레퍼런스는 ToolPanel/StorePanel로 이양됨
-    // public ItemPanel itemManager = null;
-
-    /// <summary>
-    /// 가방 매니저
-    /// </summary>
-    public ChestPanel chestManager = null;
-
-    /// <summary>
-    /// 상점 매니저
-    /// </summary>
-    public StorePanel storManager = null;
+    [Header("Warning Panel")]
+    [SerializeField] private GameObject warningPanelPrefeb = null;
 
     /// <summary>
     /// UI 매니저 (캔버스에서 자동으로 찾음)
     /// </summary>
     private GameUiManager uiManager = null;
 
-    // (제거됨) Exchange 패널 관리는 GameUiManager로 이양됨
-    // public GameObject exchangePanel = null;
-
-    [Header("Warning Panel")]
-    /// <summary>
-    /// 경고 패널 (다른 씬에서도 사용되므로 GameManager에 유지)
-    /// </summary>
-    public GameObject warningPanel = null;
-    
     /// <summary>
     /// 게임 매니저
     /// </summary>
@@ -125,8 +100,8 @@ public class GameManager : MonoBehaviour
     /// <param name="argType">적용할 타입</param>
     public void Warning(string argText)
     {
-        warningPanel.SetActive(true);
-        warningPanel.transform.GetChild(0).Find("Text").gameObject.GetComponent<Text>().text = string.Format(argText);
+        warningPanelPrefeb.SetActive(true);
+        warningPanelPrefeb.transform.GetChild(0).Find("Text").gameObject.GetComponent<Text>().text = string.Format(argText);
     }
 
     /// <summary>
@@ -152,9 +127,6 @@ public class GameManager : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    
-    // (제거됨) Exchange 관련 메서드들은 GameUiManager로 이양됨
-    // BuySetSlider, SellSetSlider, UpdateSlider, ClickConfirm
 
     /// <summary>
     /// 인스턴스

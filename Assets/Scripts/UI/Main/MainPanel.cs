@@ -17,11 +17,11 @@ public class MainPanel : BasePanel
     /// </summary>
     private void InitializeQuickItemUse()
     {
-        var toolManager = GameManager.Instance?.toolManager;
+/*        var toolManager = GameManager.Instance?.toolManager;
         if (toolManager != null)
         {
             toolManager.InitializeQuickItemUse();
             toolManager.LoadQuickItemUse();
-        }
+        }*/
     }
 }

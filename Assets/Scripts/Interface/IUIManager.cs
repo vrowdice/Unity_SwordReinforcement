@@ -7,7 +7,4 @@ public interface IUIManager
     void UpdateAllMainText();
 
     void Initialize(GameManager argGameManager, GameDataManager argGameDataManager);
-    
-    void BuySetSlider(int itemCode);
-    void SellSetSlider(int itemCode);
 }

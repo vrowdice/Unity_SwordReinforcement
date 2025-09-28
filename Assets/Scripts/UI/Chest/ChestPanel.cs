@@ -173,7 +173,7 @@ public class ChestPanel : BasePanel
         reinPanelText = toolReinPanel.transform.Find("Text")?.GetComponent<Text>();
     }
 
-    /// <summary>
+/*    /// <summary>
     /// 현재 상자 타입 업데이트
     /// </summary>
     public void NowImfoUpdate()
@@ -224,7 +224,7 @@ public class ChestPanel : BasePanel
         {
             toolReinPanel.SetActive(true);
         }
-    }
+    }*/
 
     /// <summary>
     /// 매니지 버튼 컨트롤
@@ -238,17 +238,17 @@ public class ChestPanel : BasePanel
         }
         else if (nowChestType == ChestType.TYPE.Item)
         {
-            if (itemUseFlag)
+/*            if (itemUseFlag)
             {
                 UseItem();
             }
             else
             {
                 DisuseItem();
-            }
+            }*/
         }
 
-        NowImfoUpdate();
+        //NowImfoUpdate();
         CloseChestPanel();
     }
 
@@ -264,10 +264,10 @@ public class ChestPanel : BasePanel
         }
         else if (nowChestType == ChestType.TYPE.Item)
         {
-            SellItem();
+            //SellItem();
         }
 
-        NowImfoUpdate();
+        //NowImfoUpdate();
         CloseChestPanel();
     }
 
@@ -386,13 +386,13 @@ public class ChestPanel : BasePanel
 
         GameDataManager.ManageTool(nowCode, nowReinforceCount, -1);
         
-        if (GameManager?.toolManager != null)
+/*        if (GameManager?.toolManager != null)
         {
             GameManager.toolManager.ToolPutInChest();
             GameManager.toolManager.MakeTool(nowCode, nowReinforceCount);
-        }
+        }*/
         
-        NowImfoUpdate();
+        //NowImfoUpdate();
         RequestUIUpdate();
     }
 
@@ -403,10 +403,10 @@ public class ChestPanel : BasePanel
     {
         if (GameDataManager == null) return;
 
-        if (GameManager?.toolManager != null)
+/*        if (GameManager?.toolManager != null)
         {
             GameManager.toolManager.SellTool(nowCode, nowReinforceCount);
-        }
+        }*/
         
         GameDataManager.ManageTool(nowCode, nowReinforceCount, -1);
         
@@ -443,11 +443,11 @@ public class ChestPanel : BasePanel
 
         if (GameDataManager != null)
         {
-            GameDataManager.UpdateChest(nowChestType);
+            //GameDataManager.UpdateChest(nowChestType);
         }
     }
 
-    /// <summary>
+/*    /// <summary>
     /// 아이템 사용
     /// </summary>
     public void UseItem()
@@ -484,7 +484,7 @@ public class ChestPanel : BasePanel
         }
         
         ClosePanel();
-    }
+    }*/
 
     /// <summary>
     /// 가방 필터
