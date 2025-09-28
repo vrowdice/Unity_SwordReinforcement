@@ -220,12 +220,12 @@ public class StorePanel : BasePanel
             int itemCode = itemPair.Key;
             ItemData itemData = itemPair.Value;
 
-            int categoryIndex = GetItemCategoryIndex(itemData);
+ /*           int categoryIndex = GetItemCategoryIndex(itemData);
             if (categoryIndex >= 0 && categoryIndex < storContents.Length)
             {
                 CreateStoreButton(itemCode, itemData, categoryIndex);
                 counts[categoryIndex]++;
-            }
+            }*/
         }
 
         Debug.Log($"Store items created - Disposable: {counts[0]}, Lasting: {counts[1]}, Cash: {counts[2]}");
@@ -271,7 +271,7 @@ public class StorePanel : BasePanel
     /// </summary>
     /// <param name="itemData">아이템 데이터</param>
     /// <returns>카테고리 인덱스 (0: 일회용, 1: 지속형, 2: 캐시)</returns>
-    private int GetItemCategoryIndex(ItemData itemData)
+/*    private int GetItemCategoryIndex(ItemData itemData)
     {
         if (itemData.valueType == StuffType.ItemBuyType.Csh)
         {
@@ -285,7 +285,7 @@ public class StorePanel : BasePanel
         {
             return 1; // 지속형 아이템
         }
-    }
+    }*/
 
     /// <summary>
     /// 상점 버튼 생성

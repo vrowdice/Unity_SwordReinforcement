@@ -102,7 +102,7 @@ public class GameDataManager : MonoBehaviour
     
     // 캐시된 딕셔너리들
     private Dictionary<int, ToolData> toolDataDictionary = new Dictionary<int, ToolData>();
-    private Dictionary<StuffType.ToolType, ToolPercentPriceData> toolPercentDictionary = new Dictionary<StuffType.ToolType, ToolPercentPriceData>();
+    private Dictionary<ToolType.TYPE, ToolPercentPriceData> toolPercentDictionary = new Dictionary<ToolType.TYPE, ToolPercentPriceData>();
     private Dictionary<int, ItemData> itemDataDictionary = new Dictionary<int, ItemData>();
     private Dictionary<int, int> toolCodeAmountDictionary = new Dictionary<int, int>();
 
@@ -478,7 +478,7 @@ public class GameDataManager : MonoBehaviour
     /// </summary>
     /// <param name="toolType">툴 타입</param>
     /// <returns>툴 퍼센트 데이터 (없으면 null)</returns>
-    public ToolPercentPriceData GetToolPercentData(StuffType.ToolType toolType)
+    public ToolPercentPriceData GetToolPercentData(ToolType.TYPE toolType)
     {
         toolPercentDictionary.TryGetValue(toolType, out ToolPercentPriceData percentData);
         return percentData;
@@ -598,11 +598,11 @@ public class GameDataManager : MonoBehaviour
     /// <summary>
     /// 상자 업데이트
     /// </summary>
-    public void UpdateChest(PanelType.ChestType argType)
+    public void UpdateChest(ChestType.TYPE argType)
     {
         ResetChest();
 
-        if(argType == PanelType.ChestType.Tool)
+        if(argType == ChestType.TYPE.Tool)
         {
             int _count = 0;
             foreach (KeyValuePair<int, int> item in toolCodeAmountDictionary)
@@ -621,7 +621,7 @@ public class GameDataManager : MonoBehaviour
                 _count++;
             }
         }
-        else if(argType == PanelType.ChestType.Item)
+        else if(argType == ChestType.TYPE.Item)
         {
             int _count = 0;
             foreach (KeyValuePair<int, UserItemData> item in playerData.itemInventory)

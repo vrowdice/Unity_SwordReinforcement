@@ -22,6 +22,11 @@ public class ToolPanel : BasePanel
     [SerializeField] Text toolText = null;
 
     /// <summary>
+    /// 강화 확률
+    /// </summary>
+    [SerializeField] Text reinforcePercentTxt = null;
+
+    /// <summary>
     /// 판매비용 택스트
     /// </summary>
     [SerializeField] Text sellCostTxt = null;
@@ -32,14 +37,9 @@ public class ToolPanel : BasePanel
     [SerializeField] Text reinforceCostTxt = null;
 
     /// <summary>
-    /// 강화 확률
-    /// </summary>
-    [SerializeField] Text reinforcePercentTxt = null;
-
-    /// <summary>
     /// 현재 모드 텍스트
     /// </summary>
-    [SerializeField] Text modeText = null;
+    [SerializeField] Text nowRainforceModeText = null;
 
     /// <summary>
     /// 상자 패널의 검 이미지
@@ -60,12 +60,12 @@ public class ToolPanel : BasePanel
     /// <summary>
     /// 현재 툴 타입
     /// </summary>
-    StuffType.ToolType nowToolType = new StuffType.ToolType();
+    ToolType.TYPE nowToolType = new ToolType.TYPE();
 
     /// <summary>
     /// 현재 도구 패널 모드
     /// </summary>
-    PanelType.ImproveType nowImproveMode = new PanelType.ImproveType();
+    ImproveType.TYPE nowImproveMode = new ImproveType.TYPE();
 
     /// <summary>
     /// 현재 강화횟수
@@ -132,8 +132,8 @@ public class ToolPanel : BasePanel
         // SerializeField로 인스펙터에서 할당하므로 Find 코드들을 제거하거나 null 체크로 대체
         if (toolImage == null)
             toolImage = gameObject.transform.Find("ToolImage")?.GetComponent<Image>();
-        if (modeText == null)
-            modeText = gameObject.transform.Find("ModeText")?.GetComponent<Text>();
+        if (nowRainforceModeText == null)
+            nowRainforceModeText = gameObject.transform.Find("ModeText")?.GetComponent<Text>();
         if (toolText == null)
             toolText = gameObject.transform.Find("ToolText")?.GetComponent<Text>();
         if (sellCostTxt == null)
@@ -145,15 +145,15 @@ public class ToolPanel : BasePanel
         if (improveBtn == null)
             improveBtn = gameObject.transform.Find("ImproveBtn")?.gameObject;
 
-        SelectToolType(StuffType.ToolType.Sword);
-        ChangeMode(PanelType.ImproveType.Upgrade);
+        SelectToolType(ToolType.TYPE.Sword);
+        ChangeMode(ImproveType.TYPE.Upgrade);
     }
 
     /// <summary>
     /// 강화하기 원하는 도구 타입 선택
     /// </summary>
     /// <param name="argType">도구 타입</param>
-    public void SelectToolType(StuffType.ToolType argType)
+    public void SelectToolType(ToolType.TYPE argType)
     {
         if (!CheckMainCode(IsNowToolCode))
         {
@@ -185,13 +185,13 @@ public class ToolPanel : BasePanel
     /// </summary>
     public void OtherMode()
     {
-        if(nowImproveMode == PanelType.ImproveType.Reinforce)
+        if(nowImproveMode == ImproveType.TYPE.Reinforce)
         {
-            ChangeMode(PanelType.ImproveType.Upgrade);
+            ChangeMode(ImproveType.TYPE.Upgrade);
         }
         else
         {
-            ChangeMode(PanelType.ImproveType.Reinforce);
+            ChangeMode(ImproveType.TYPE.Reinforce);
         }
     }
 
@@ -199,17 +199,17 @@ public class ToolPanel : BasePanel
     /// 모드 변경
     /// </summary>
     /// <param name="argType">모드 타입</param>
-    void ChangeMode(PanelType.ImproveType argType)
+    void ChangeMode(ImproveType.TYPE argType)
     {
         nowImproveMode = argType;
 
         string _string = string.Format("업그레이드");
-        if (argType == PanelType.ImproveType.Reinforce)
+        if (argType == ImproveType.TYPE.Reinforce)
         {
             _string = string.Format("강화");
         }
 
-        modeText.text = string.Format(_string + " 모드");
+        nowRainforceModeText.text = string.Format(_string + " 모드");
         improveBtn.transform.GetChild(0).gameObject.GetComponent<Text>().text = string.Format(_string + "하기");
     }
 
@@ -226,7 +226,7 @@ public class ToolPanel : BasePanel
             return;
         }
 
-        if (nowImproveMode == PanelType.ImproveType.Reinforce)
+        if (nowImproveMode == ImproveType.TYPE.Reinforce)
         {
             if (CheckMainCode(IsNowToolCode))
             {
@@ -363,7 +363,7 @@ public class ToolPanel : BasePanel
         long _reinCost = PriceTool(IsNowToolCode, IsNowReinCount);
         IsImproveCost = _reinCost * 3 / 10;
         IsSellCost = _reinCost;
-        if (nowImproveMode == PanelType.ImproveType.Reinforce)
+        if (nowImproveMode == ImproveType.TYPE.Reinforce)
         {
             IsImprovePercent = GameDataManager.Instance.GetToolPercentData(ParseToolType(IsNowToolCode)).reinforcePercent[IsNowReinCount];
         }
@@ -404,7 +404,7 @@ public class ToolPanel : BasePanel
     {
         string _string = string.Empty;
         _string = string.Format("업그레이드");
-        if (nowImproveMode == PanelType.ImproveType.Reinforce)
+        if (nowImproveMode == ImproveType.TYPE.Reinforce)
         {
             _string = "강화";
         }
@@ -503,31 +503,31 @@ public class ToolPanel : BasePanel
     /// <param name="argType">툴 타입</param>
     /// <param name="argClass">툴 클래스</param>
     /// <returns>툴 코드</returns>
-    int ParseToolCode(StuffType.ToolType argType, int argClass)
+    int ParseToolCode(ToolType.TYPE argType, int argClass)
     {
         int _mainCode = 0;
 
         switch (argType)
         {
-            case StuffType.ToolType.Sword:
+            case ToolType.TYPE.Sword:
                 _mainCode = 10000;
                 break;
-            case StuffType.ToolType.Spear:
+            case ToolType.TYPE.Spear:
                 _mainCode = 11000;
                 break;
-            case StuffType.ToolType.Shild:
+            case ToolType.TYPE.Shild:
                 _mainCode = 12000;
                 break;
-            case StuffType.ToolType.Hammer:
+            case ToolType.TYPE.Hammer:
                 _mainCode = 13000;
                 break;
-            case StuffType.ToolType.Sickle:
+            case ToolType.TYPE.Sickle:
                 _mainCode = 14000;
                 break;
-            case StuffType.ToolType.Shovle:
+            case ToolType.TYPE.Shovle:
                 _mainCode = 15000;
                 break;
-            case StuffType.ToolType.Axe:
+            case ToolType.TYPE.Axe:
                 _mainCode = 16000;
                 break;
         }
@@ -541,43 +541,43 @@ public class ToolPanel : BasePanel
     /// <param name="argType">툴 타입</param>
     /// <param name="argClass">툴 클래스</param>
     /// <returns>툴 코드</returns>
-    StuffType.ToolType ParseToolType(int argCode)
+    ToolType.TYPE ParseToolType(int argCode)
     {
-        StuffType.ToolType _type = new StuffType.ToolType();
+        ToolType.TYPE _type = new ToolType.TYPE();
 
         if(argCode / 1000 == 10)
         {
-            _type = StuffType.ToolType.Sword;
+            _type = ToolType.TYPE.Sword;
         }
         if (argCode / 1000 == 11)
         {
-            _type = StuffType.ToolType.Spear;
+            _type = ToolType.TYPE.Spear;
         }
         if (argCode / 1000 == 12)
         {
-            _type = StuffType.ToolType.Shild;
+            _type = ToolType.TYPE.Shild;
         }
         if (argCode / 1000 == 13)
         {
-            _type = StuffType.ToolType.Hammer;
+            _type = ToolType.TYPE.Hammer;
         }
         if (argCode / 1000 == 14)
         {
-            _type = StuffType.ToolType.Sickle;
+            _type = ToolType.TYPE.Sickle;
         }
         if (argCode / 1000 == 15)
         {
-            _type = StuffType.ToolType.Shovle;
+            _type = ToolType.TYPE.Shovle;
         }
         if (argCode / 1000 == 16)
         {
-            _type = StuffType.ToolType.Axe;
+            _type = ToolType.TYPE.Axe;
         }
 
         return _type;
     }
 
-    public StuffType.ToolType IsNowToolType
+    public ToolType.TYPE IsNowToolType
     {
         get
         {

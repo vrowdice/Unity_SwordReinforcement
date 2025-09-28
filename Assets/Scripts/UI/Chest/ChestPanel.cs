@@ -85,7 +85,7 @@ public class ChestPanel : BasePanel
     /// <summary>
     /// 현재 상자 타입
     /// </summary>
-    PanelType.ChestType nowChestType = new PanelType.ChestType();
+    ChestType.TYPE nowChestType = new ChestType.TYPE();
 
     protected override void OnPanelOpen()
     {
@@ -196,11 +196,11 @@ public class ChestPanel : BasePanel
 
         nowCode = argCode;
         
-        if(nowChestType == PanelType.ChestType.Tool)
+        if(nowChestType == ChestType.TYPE.Tool)
         {
             HandleToolSelection(argCode);
         }
-        else if(nowChestType == PanelType.ChestType.Item)
+        else if(nowChestType == ChestType.TYPE.Item)
         {
             SetChestPanel();
         }
@@ -231,12 +231,12 @@ public class ChestPanel : BasePanel
     /// </summary>
     public void ManageBtnControll()
     {
-        if (nowChestType == PanelType.ChestType.Tool)
+        if (nowChestType == ChestType.TYPE.Tool)
         {
             ChestPutOffTool();
             CloseToolReinPanel();
         }
-        else if (nowChestType == PanelType.ChestType.Item)
+        else if (nowChestType == ChestType.TYPE.Item)
         {
             if (itemUseFlag)
             {
@@ -257,12 +257,12 @@ public class ChestPanel : BasePanel
     /// </summary>
     public void SellBtnControll()
     {
-        if (nowChestType == PanelType.ChestType.Tool)
+        if (nowChestType == ChestType.TYPE.Tool)
         {
             ChestSellTool();
             CloseToolReinPanel();
         }
-        else if (nowChestType == PanelType.ChestType.Item)
+        else if (nowChestType == ChestType.TYPE.Item)
         {
             SellItem();
         }
@@ -288,11 +288,11 @@ public class ChestPanel : BasePanel
     {   
         if (GameDataManager == null) return;
 
-        if (nowChestType == PanelType.ChestType.Tool)
+        if (nowChestType == ChestType.TYPE.Tool)
         {
             SetToolPanel();
         }
-        else if(nowChestType == PanelType.ChestType.Item)
+        else if(nowChestType == ChestType.TYPE.Item)
         {
             SetItemPanel();
         }
@@ -431,13 +431,13 @@ public class ChestPanel : BasePanel
         switch (argIndex)
         {
             case 0:
-                nowChestType = PanelType.ChestType.Tool;
+                nowChestType = ChestType.TYPE.Tool;
                 break;
             case 1:
-                nowChestType = PanelType.ChestType.Item;
+                nowChestType = ChestType.TYPE.Item;
                 break;
             default:
-                nowChestType = PanelType.ChestType.Odd;
+                nowChestType = ChestType.TYPE.Odd;
                 break;
         }
 

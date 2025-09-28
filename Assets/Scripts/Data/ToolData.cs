@@ -18,7 +18,7 @@ public class ToolData : ScriptableObject
     /// <summary>
     /// 툴 타입
     /// </summary>
-    public StuffType.ToolType toolType = new StuffType.ToolType();
+    public ToolType.TYPE toolType = new ToolType.TYPE();
 
     /// <summary>
     /// 업그레이드 횟수

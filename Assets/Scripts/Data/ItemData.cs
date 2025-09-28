@@ -10,12 +10,12 @@ public class ItemData : ScriptableObject
     /// <summary>
     /// 아이템 사용 타입
     /// </summary>
-    public StuffType.ItemUseType useType = StuffType.ItemUseType.One;
+    public ItemUseType.TYPE useType = ItemUseType.TYPE.One;
 
     /// <summary>
     /// 아이템 구매 방식 타입
     /// </summary>
-    public StuffType.ItemBuyType valueType = StuffType.ItemBuyType.None;
+    //public ItemBuyType valueType = ItemUseType.TYPE.None;
     
     [Header("Item Value")]
     /// <summary>
@@ -48,7 +48,7 @@ public class ItemData : ScriptableObject
     /// <summary>
     /// 아이템 효과 타입
     /// </summary>
-    public StuffType.ItemEffectType[] effectType = null;
+    public ItemEffectType.TYPE[] effectType = null;
 
     /// <summary>
     /// 아이템 효과 수치
