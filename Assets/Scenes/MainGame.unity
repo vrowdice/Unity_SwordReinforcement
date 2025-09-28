@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 30952964}
   - component: {fileID: 30952963}
   m_Layer: 5
-  m_Name: Image
+  m_Name: IconImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12256,13 +12256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c7785485e671a40830bb0e9156757d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 0}
-  itemName: {fileID: 0}
-  itemCount: {fileID: 0}
-  itemDescription: {fileID: 0}
-  itemEffect: {fileID: 0}
-  itemCost: {fileID: 0}
-  itemSellCost: {fileID: 0}
+  iconImage: {fileID: 0}
+  nameText: {fileID: 0}
+  countText: {fileID: 0}
 --- !u!1 &1103035322
 GameObject:
   m_ObjectHideFlags: 0
